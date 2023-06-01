@@ -12,16 +12,14 @@ class BookController extends Controller
 
     public function index()
     {
-        return Book::whereUserId(1)->get();
+        return $this->success(Book::whereUserId(auth()->id())->get()->toArray());
     }
 
 
     public function create(Request $request)
     {
-        $user_id = 1;
-
         $book = new Book;
-        $book->user_id = $user_id;
+        $book->user_id = auth()->id();
         $book->title = $request->title;
         $book->author = $request->author;
         $book->genre = $request->genre;
@@ -29,5 +27,14 @@ class BookController extends Controller
         $book->save();
 
         return $this->success($book->toArray(), 'Book has been added to library');
+    }
+
+
+    public function updateReadability(Request $request)
+    {
+        if (Book::whereId($request->id)->update(['is_read' => $request->read])) {
+            return $this->success([], 'Updated');
+        }
+        return $this->success([], 'Not Updated');
     }
 }

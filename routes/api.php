@@ -26,5 +26,6 @@ Route::group([ 'middleware' => 'auth:sanctum' ], function($router) {
     
     $router->get('books', [BookController::class, 'index']);
     $router->post('books/create', [BookController::class, 'create']);
+    $router->post('books/update-readability', [BookController::class, 'updateReadability']);
 });
 
